@@ -19,6 +19,7 @@
 //
 
 #include <QDateTime>
+#include <QLocale>
 #include <QPainter>
 
 #include "dayofweekwidget.h"
@@ -26,10 +27,11 @@
 DayOfWeekWidget::DayOfWeekWidget(QWidget *parent)
   : QWidget(parent)
 {
+  QLocale locale;
   QFont bold_font(font().family(),font().pointSize(),QFont::Bold);
 
   for(int i=0;i<7;i++) {
-    dow_labels[i]=new QLabel(QDate::longDayName(i+1),this);
+    dow_labels[i]=new QLabel(locale.standaloneDayName(i+1),this);
     dow_labels[i]->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
     dow_labels[i]->setFont(bold_font);
     dow_checks[i]=new QCheckBox(this);

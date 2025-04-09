@@ -42,6 +42,7 @@ class Accessor
   virtual void setRow(const QString &column,const QTime &time) const;
   virtual void setRow(const QString &column,const QDate &date) const;
   virtual void setRow(const QString &column,const QDateTime &dt) const;
+  QString dowFieldName(int dow) const;
 };
 
 

@@ -116,13 +116,14 @@ void Event::setLength(int msecs) const
 
 bool Event::dowActive(int dow) const
 {
-  return getRow(QDate::shortDayName(dow).toUpper()).toBool();
+  return getRow(dowFieldName(dow)).toBool();
 }
 
 
 void Event::setDowActive(int dow,bool state) const
 {
-  setRow(QDate::shortDayName(dow).toUpper(),state);
+  setRow(dowFieldName(dow).toUpper(),state);
+  //  setRow(QDate::shortDayName(dow).toUpper(),state);
 }
 
 

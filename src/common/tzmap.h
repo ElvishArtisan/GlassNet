@@ -68,6 +68,7 @@ class TzMap
   int64_t ReadLongSigned(int fd) const;
   uint8_t ReadByte(int fd) const;
   QStringList ReadStrings(int fd);
+  ssize_t ReadRaw(int fd,void *buf,size_t count) const;
   uint64_t ntohll(uint64_t lword) const;
   QList<TzType *> tzh_types;
   QString tzh_name;

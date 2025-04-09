@@ -104,5 +104,40 @@ void TimeEngine::triggerData()
 
 QString TimeEngine::DowSql(const QDate &date)
 {
-  return QDate::shortDayName(date.dayOfWeek()).toUpper()+"=1";
+  //
+  // Maintainer's Note: Don't use QDate::dayOfWeek() here since it's
+  //                    locale-specific!
+  //
+  QString ret;
+  switch(date.dayOfWeek()) {
+  case 1:
+    ret="MON=1";
+      break;
+
+  case 2:
+    ret="TUE=1";
+      break;
+
+  case 3:
+    ret="WED=1";
+      break;
+
+  case 4:
+    ret="THU=1";
+      break;
+
+  case 5:
+    ret="FRI=1";
+      break;
+
+  case 6:
+    ret="SAT=1";
+      break;
+
+  case 7:
+    ret="SUN=1";
+      break;
+  }
+
+  return ret;
 }

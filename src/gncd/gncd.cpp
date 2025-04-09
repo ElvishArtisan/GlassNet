@@ -370,12 +370,13 @@ void MainObject::playerErrorData(QProcess::ProcessError err)
 
 void MainObject::updateFinishedData(int exit_code,QProcess::ExitStatus status)
 {
-  if(gncd_update_pass>0) {
-    system("/sbin/reboot");
-    exit(256);
-  }
   QStringList args;
   QProcess *p=NULL;
+
+  if(gncd_update_pass>0) {
+    Reboot();
+    exit(256);
+  }
 
   args.push_back("-q");
   args.push_back("-y");
@@ -612,7 +613,7 @@ void MainObject::ProcessTimezone(int id,const QStringList &args)
       QProcess *proc=new QProcess(this);
       proc->start("/bin/timedatectl",pargs);
       proc->waitForFinished();
-      system("/sbin/reboot");
+      Reboot();
       exit(256);
     }
   }
@@ -670,6 +671,15 @@ bool MainObject::ReadInterface()
   close(sock);
 
   return reset_needed;
+}
+
+
+void MainObject::Reboot()
+{
+  QProcess *p=new QProcess(this);
+  p->start("/sbin/reboot",QStringList(),QIODevice::ReadWrite);
+  p->waitForFinished();
+  delete p;
 }
 
 

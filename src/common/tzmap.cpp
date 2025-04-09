@@ -2,7 +2,7 @@
 //
 // Map a timezone definition file from the TZ database.
 //
-//   (C) Copyright 2018-2021 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2018-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -74,7 +74,7 @@ QString TzType::dump() const
 {
   return startDateTime().toString("yyyy-MM-dd hh:mm:ss")+
     " name: "+name()+
-    QString().sprintf(" offset: %ld",offset());
+    QString::asprintf(" offset: %ld",offset());
 }
 
 
@@ -242,7 +242,7 @@ void TzMap::ReadVersion0Block(int fd,bool dump)
   }
 
   names=new char[tzh_charcnt];
-  read(fd,names,tzh_charcnt);
+  ReadRaw(fd,names,tzh_charcnt);
   //  QStringList names=ReadStrings(fd);
 
   lseek(fd,tzh_leapcnt*8,SEEK_CUR);  // leap seconds, not needed
@@ -318,7 +318,7 @@ void TzMap::ReadVersion2Block(int fd,bool dump)
   //  printf("POS4: 0x%08X\n",lseek(fd,0,SEEK_CUR));
   
   names=new char[tzh_charcnt];
-  read(fd,names,tzh_charcnt);
+  ReadRaw(fd,names,tzh_charcnt);
   //  QStringList names=ReadStrings(fd);
   //  printf("tzh_charcnt: %u  strings: %d\n",tzh_charcnt,names.size());
 
@@ -343,7 +343,7 @@ void TzMap::ReadVersion2Block(int fd,bool dump)
 
 QDateTime TzMap::DateTimeFromTimeT(int64_t time) const
 {
-  return QDateTime(QDate(1970,1,1)).addMSecs(1000*time);
+  return QDateTime::fromSecsSinceEpoch(time);
 }
 
 
@@ -351,7 +351,7 @@ uint32_t TzMap::ReadUnsigned(int fd) const
 {
   uint32_t accum;
 
-  read(fd,(char *)(&accum),4);
+  ReadRaw(fd,(char *)(&accum),4);
 
   return htonl(accum);
 }
@@ -361,7 +361,7 @@ int32_t TzMap::ReadSigned(int fd) const
 {
   int32_t accum;
 
-  read(fd,(char *)(&accum),4);
+  ReadRaw(fd,(char *)(&accum),4);
 
   return htonl(accum);
 }
@@ -371,7 +371,7 @@ int64_t TzMap::ReadLongSigned(int fd) const
 {
   int64_t accum;
 
-  read(fd,(char *)(&accum),8);
+  ReadRaw(fd,(char *)(&accum),8);
 
   return ntohll(accum);
 }
@@ -381,7 +381,7 @@ uint8_t TzMap::ReadByte(int fd) const
 {
   uint8_t accum;
 
-  read(fd,(char *)(&accum),1);
+  ReadRaw(fd,(char *)(&accum),1);
 
   return accum;
 }
@@ -393,7 +393,7 @@ QStringList TzMap::ReadStrings(int fd)
   QString accum="";
   QStringList ret;
 
-  while(read(fd,data,1)>0) {
+  while(ReadRaw(fd,data,1)>0) {
     if((0xFF&data[0])==0) {
       if(accum.isEmpty()) {
 	return ret;
@@ -426,4 +426,14 @@ uint64_t TzMap::ntohll(uint64_t lword) const
       ((0xff00000000000000&lword)>>56);
   }
   return ret;
+}
+
+
+ssize_t TzMap::ReadRaw(int fd,void *buf,size_t count) const
+{
+  ssize_t n=read(fd,buf,count);
+  if(n<0) {
+    fprintf(stderr,"read error: %s\n",strerror(errno));
+  }
+  return n;
 }

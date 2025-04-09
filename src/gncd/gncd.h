@@ -66,6 +66,7 @@ class MainObject : public QObject
   void OpenDb();
   void CreateDb(const QString dbfile_name);
   bool CheckSchema();
+  void Reboot();
   QProcess *gncd_player_process;
   QTimer *gncd_stop_timer;
   TimeEngine *gncd_time_engine;

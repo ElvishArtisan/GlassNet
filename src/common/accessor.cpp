@@ -119,3 +119,40 @@ void Accessor::setRow(const QString &column,const QDateTime &dt) const
     whereClause();
   SqlQuery::run(sql);
 }
+
+
+QString Accessor::dowFieldName(int dow) const
+{
+  QString ret="BAD";
+
+  switch(dow) {
+  case 1:
+    ret="MON";
+    break;
+  
+  case 2:
+    ret="TUE";
+    break;
+  
+  case 3:
+    ret="WED";
+    break;
+  
+  case 4:
+    ret="THU";
+    break;
+  
+  case 5:
+    ret="FRI";
+    break;
+  
+  case 6:
+    ret="SAT";
+    break;
+
+  case 7:
+    ret="SUN";
+    break;
+  }
+  return ret;
+}
