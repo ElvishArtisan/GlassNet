@@ -2,7 +2,7 @@
 //
 // List GlassNet Chassis
 //
-//   (C) Copyright 2016-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -143,9 +143,8 @@ void ListChassis::deleteData()
     SqlQuery *q=new SqlQuery(sql);
     if(q->size()>0) {
       switch(QMessageBox::question(this,tr("GlassNet - Warning"),
-				   tr("Chassis contains one or more receivers.")+"\n"+
-				   tr("Delete receivers also?"),
-				   QMessageBox::Yes,QMessageBox::No,QMessageBox::Cancel)) {
+			   tr("Chassis contains one or more receivers.")+"\n"+
+			   tr("Delete receivers also?"))) {
       case QMessageBox::Yes:
 	while(q->next()) {
 	  Receiver::remove(q->value(0).toInt());
@@ -159,7 +158,7 @@ void ListChassis::deleteData()
 	  QString::asprintf("`CHASSIS_ID`=%d",chassis_id);
 	SqlQuery::run(sql);
 	break;
-
+     
       default:
 	delete q;
 	return;

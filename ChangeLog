@@ -335,3 +335,5 @@
 2025-04-09 Fred Gleason <fredg@paravelsystems.com>
 	* Cleaned up compiler warnings in gncd(8).
 	* Cleaned up compiler warnings in gnmc(8).
+2025-04-09 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the Qt5 dependency to Qt6.

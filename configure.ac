@@ -51,10 +51,11 @@ AC_ARG_ENABLE(docbook,[  --disable-docbook       disable building of DocBook doc
 #
 # Check for Qt (Mandatory)
 #
-PKG_CHECK_MODULES(QT5CLI,Qt5Core Qt5Network Qt5Sql,[],[AC_MSG_ERROR([*** Qt5 CLI components not found ***])])
-PKG_CHECK_MODULES(QT5GUI,Qt5Core Qt5Gui Qt5Widgets Qt5Network Qt5Sql,[],[AC_MSG_ERROR([*** Qt5 GUI components not found ***])])
-AC_CHECK_PROG(MOC_NAME,moc-qt5,[moc-qt5],[moc])
-AC_SUBST(MOC,$MOC_NAME)
+AQ_FIND_QT6(QT6,Core Gui Widgets Network Sql,[],[AC_MSG_ERROR([*** Qt6 not found ***])])
+#PKG_CHECK_MODULES(QT5CLI,Qt5Core Qt5Network Qt5Sql,[],[AC_MSG_ERROR([*** Qt5 CLI components not found ***])])
+#PKG_CHECK_MODULES(QT5GUI,Qt5Core Qt5Gui Qt5Widgets Qt5Network Qt5Sql,[],[AC_MSG_ERROR([*** Qt5 GUI components not found ***])])
+#AC_CHECK_PROG(MOC_NAME,moc-qt5,[moc-qt5],[moc])
+#AC_SUBST(MOC,$MOC_NAME)
 
 #
 # Check for OpenSSL (Mandatory)

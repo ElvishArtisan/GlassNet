@@ -2,7 +2,7 @@
 //
 // Table Viewer for GlassNet Events
 //
-//   (C) Copyright 2017-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2017-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -97,7 +97,8 @@ void EventTableView::mousePressEvent(QMouseEvent *e)
       SqlTableModel *m=(SqlTableModel *)model();
       event_event_id=m->data(index.row(),0).toInt();
       event_receiver_id=Event::receiverId(m->data(index.row(),0).toInt());
-      event_menu->popup(e->globalPos());
+      event_menu->
+	popup(QPoint(e->globalPosition().x(),e->globalPosition().y()));
     }
     else {
       event_event_id=-1;

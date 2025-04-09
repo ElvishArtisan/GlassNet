@@ -20,12 +20,12 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -Wno-strict-aliasing -std=c++11 -fPIC @QT5GUI_CFLAGS@ @OPENSSL_CFLAGS@
-MOC = @QT5_MOC@
+AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -Wno-strict-aliasing -std=c++17 -fPIC @QT6_CFLAGS@ @OPENSSL_CFLAGS@
+MOC = @QT6_MOC@
 
 # The dependency for qt's Meta Object Compiler (moc)
 moc_%.cpp:	%.h
-	@MOC@ $< -o $@
+	$(MOC) $< -o $@
 
 
 bin_PROGRAMS = gnmc
@@ -98,7 +98,7 @@ nodist_gnmc_SOURCES = accessor.cpp accessor.h\
                       tzmap.cpp tzmap.h\
                       user.cpp user.h
 
-gnmc_LDADD = @QT5GUI_LIBS@ @OPENSSL_LIBS@
+gnmc_LDADD = @QT6_LIBS@ @OPENSSL_LIBS@
 
 CLEANFILES = *~\
              moc_*\

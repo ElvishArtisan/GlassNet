@@ -402,7 +402,7 @@ QStringList TzMap::ReadStrings(int fd)
       accum="";
     }
     else {
-      accum+=0xff&data[0];
+      accum+=QChar(data[0]);
     }
   }
   fprintf(stderr,"ReadString() ran off the end of the file\n");

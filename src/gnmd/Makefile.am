@@ -2,7 +2,7 @@
 ##
 ## Makefile for the gnmd(1) management daemon for GlassNet
 ##
-## (C) Copyright 2016-2022 Fred Gleason <fredg@paravelsystems.com>
+## (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License version 2 as
@@ -20,12 +20,12 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -Wno-strict-aliasing -std=c++11 -fPIC @QT5CLI_CFLAGS@
-MOC = @QT5_MOC@
+AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -Wno-strict-aliasing -std=c++17 -fPIC @QT6_CFLAGS@
+MOC = @QT6_MOC@
 
 # The dependency for qt's Meta Object Compiler (moc)
 moc_%.cpp:	%.h
-	@MOC@ $< -o $@
+	$(MOC) $< -o $@
 
 
 sbin_PROGRAMS = gnmd
@@ -46,7 +46,7 @@ nodist_gnmd_SOURCES = accessor.cpp accessor.h\
                       streamcmdserver.cpp streamcmdserver.h\
                       tzmap.cpp tzmap.h
 
-gnmd_LDADD = @QT5CLI_LIBS@
+gnmd_LDADD = @QT6_LIBS@
 
 CLEANFILES = *~\
              moc_*\
