@@ -132,11 +132,29 @@ else
   AC_SUBST(VENDOR,suse)
 fi 
 
+#
+# Generated File Warnings
+#
+AC_SUBST_FILE(GENERATED_C_FILE_WARNING)
+GENERATED_C_FILE_WARNING=$srcdir/helpers/c_file_warning
+
+AC_SUBST_FILE(GENERATED_SCRIPT_FILE_WARNING)
+GENERATED_SCRIPT_FILE_WARNING=$srcdir/helpers/script_file_warning
+
+AC_SUBST_FILE(GENERATED_XML_FILE_WARNING)
+GENERATED_XML_FILE_WARNING=$srcdir/helpers/xml_file_warning
+
+AC_SUBST_FILE(GENERATED_INI_FILE_WARNING)
+GENERATED_INI_FILE_WARNING=$srcdir/helpers/ini_file_warning
+
 AC_CONFIG_FILES([ \
     conf/Makefile \
+    debian/Makefile \
+    debian/source/Makefile \
     docs/Makefile \
     docs/client_tables/Makefile \
     docs/management_tables/Makefile \
+    helpers/Makefile \
     icons/Makefile \
     src/Makefile \
     src/common/Makefile \
@@ -147,9 +165,11 @@ AC_CONFIG_FILES([ \
     systemd/gnmd.service \
     systemd/Makefile \
     xdg/Makefile \
+    build_debs.sh \
     glassnet.spec \
     Makefile ])
 AC_OUTPUT()
+chmod 755 build_debs.sh
 
 #
 # Link Common Elements
@@ -157,16 +177,6 @@ AC_OUTPUT()
 ./link_common.sh gncd
 ./link_common.sh gnmc
 ./link_common.sh gnmd
-
-AC_MSG_NOTICE()
-if test $BUILD_GNCD ; then
-  AC_MSG_NOTICE(Build it.)
-else
-  AC_MSG_NOTICE(Dont build it.)
-fi
-AC_MSG_NOTICE(Now enter 'make' to build the software.)
-AC_MSG_NOTICE()
-
 
 AC_MSG_NOTICE()
 AC_MSG_NOTICE("|---------------------------------------------------------|")

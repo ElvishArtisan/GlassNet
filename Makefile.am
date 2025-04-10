@@ -1,10 +1,10 @@
-## automake.am
+## Makefile.am
 ##
-## Top level automake.am
+## Top level Makefile.am
 ##
 ## Use automake to process this into a Makefile.in
 ##
-##   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+##   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License version 2 as
@@ -26,7 +26,9 @@
 
 ##SUBDIRS = $(DOCBOOK_AM_OPT) src
 SUBDIRS = conf\
+          debian\
           docs\
+          helpers\
           icons\
           src\
           systemd\
@@ -34,6 +36,9 @@ SUBDIRS = conf\
 
 install-exec-local:	
 	mkdir -p $(DESTDIR)/var/gncd
+
+deb:	dist
+	./build_debs.sh
 
 rpm:	dist
 	cp glassnet-$(VERSION).tar.gz $(HOME)/rpmbuild/SOURCES/
@@ -44,20 +49,28 @@ rpm:	dist
 	rm -rf $(HOME)/rpmbuild/BUILD/glassnet-$(VERSION)
 
 EXTRA_DIST = autogen.sh\
+             build_debs.sh.in\
              get_distro.sh\
              get_target.sh\
+             GFDL-1.3\
              link_common.sh\
              PACKAGE_VERSION
 
 CLEANFILES = *~\
+             *.buildinfo\
+             *.changes\
              *.deb\
+             *.ddeb\
+             *.dsc\
              *.mo\
              *.rpm\
              *.tar.gz\
+             *.tar.xz\
              *.tgz\
              *.zip
 
 DISTCLEANFILES = *.spec\
+                 build_debs.sh\
                  config.guess\
                  config.sub\
                  ltmain.sh

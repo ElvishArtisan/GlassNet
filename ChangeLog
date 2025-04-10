@@ -340,3 +340,5 @@
 2025-04-10 Fred Gleason <fredg@paravelsystems.com>
 	* Added '--disable-gncd', '--disable-gnmc' and '--disable-gnmd'
 	switches to the 'configure' script.
+2025-04-10 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'make deb' target.

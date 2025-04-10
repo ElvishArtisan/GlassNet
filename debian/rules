@@ -1,0 +1,89 @@
+#!/usr/bin/make -f
+
+build:	
+	dh_update_autotools_config
+	dh_autoreconf
+	 ./configure --prefix=/usr --libdir=/usr/lib
+	make $(DEBUILD_MAKE_ARGS)
+
+binary:	
+	dh_testroot
+	dh_prep
+	dh_auto_install
+	dh_installchangelogs ChangeLog
+
+#
+# glassnet-mgmnt
+#
+	mkdir -p debian/glassnet-mgmnt/usr/bin
+	mv debian/tmp/usr/bin/gnmc debian/glassnet-mgmnt/usr/bin/
+	mkdir -p debian/glassnet-mgmnt/usr/share/applications
+	mv debian/tmp/usr/share/applications/gnmc.desktop debian/glassnet-mgmnt/usr/share/applications/
+	mkdir -p debian/glassnet-mgmnt/usr/share/doc/glassnet-mgmnt
+	cp AUTHORS debian/glassnet-mgmnt/usr/share/doc/glassnet-mgmnt/
+	cp ChangeLog debian/glassnet-mgmnt/usr/share/doc/glassnet-mgmnt/
+	cp COPYING debian/glassnet-mgmnt/usr/share/doc/glassnet-mgmnt/
+	cp NEWS debian/glassnet-mgmnt/usr/share/doc/glassnet-mgmnt/
+	cp README debian/glassnet-mgmnt/usr/share/doc/glassnet-mgmnt/
+
+#
+# glassnet-server
+#
+	mkdir -p debian/glassnet-server/usr/sbin
+	mv debian/tmp/usr/sbin/gnmd debian/glassnet-server/usr/sbin/
+	mkdir -p debian/glassnet-server/usr/lib/systemd/system
+	mv debian/tmp/usr/lib/systemd/system/gnmd.service debian/glassnet-server/usr/lib/systemd/system/
+	mkdir -p debian/glassnet-server/usr/share/doc/glassnet-server
+	cp AUTHORS debian/glassnet-server/usr/share/doc/glassnet-server/
+	cp ChangeLog debian/glassnet-server/usr/share/doc/glassnet-server/
+	cp COPYING debian/glassnet-server/usr/share/doc/glassnet-server/
+	cp NEWS debian/glassnet-server/usr/share/doc/glassnet-server/
+	cp README debian/glassnet-server/usr/share/doc/glassnet-server/
+
+#
+# glassnet-receiver
+#
+	mkdir -p debian/glassnet-receiver/usr/sbin
+	mv debian/tmp/usr/sbin/gncd debian/glassnet-receiver/usr/sbin/
+	mkdir -p debian/glassnet-receiver/usr/lib/systemd/system
+	mv debian/tmp/usr/lib/systemd/system/gncd.service debian/glassnet-receiver/usr/lib/systemd/system/
+	mkdir -p debian/glassnet-receiver/usr/share/doc/glassnet-receiver
+	cp AUTHORS debian/glassnet-receiver/usr/share/doc/glassnet-receiver/
+	cp ChangeLog debian/glassnet-receiver/usr/share/doc/glassnet-receiver/
+	cp COPYING debian/glassnet-receiver/usr/share/doc/glassnet-receiver/
+	cp NEWS debian/glassnet-receiver/usr/share/doc/glassnet-receiver/
+	cp README debian/glassnet-receiver/usr/share/doc/glassnet-receiver/
+
+#
+# glassnet-doc
+#
+	mkdir -p debian/glassnet-doc/usr/share/doc/glassnet-doc
+	cp AUTHORS debian/glassnet-doc/usr/share/doc/glassnet-doc/
+	cp ChangeLog debian/glassnet-doc/usr/share/doc/glassnet-doc/
+	cp COPYING debian/glassnet-doc/usr/share/doc/glassnet-doc/
+	cp GFDL-1.3 debian/glassnet-doc/usr/share/doc/glassnet-doc/
+	cp NEWS debian/glassnet-doc/usr/share/doc/glassnet-doc/
+	cp README debian/glassnet-doc/usr/share/doc/glassnet-doc/
+	mkdir -p debian/glassnet-doc/usr/share/doc/glassnet-doc/client_tables
+	cp docs/client_tables/*.txt debian/glassnet-doc/usr/share/doc/glassnet-doc/client_tables/
+	mkdir -p debian/glassnet-doc/usr/share/doc/glassnet-doc/management_tables
+	cp docs/management_tables/*.txt debian/glassnet-doc/usr/share/doc/glassnet-doc/management_tables/
+	cp docs/*.txt debian/glassnet-doc/usr/share/doc/glassnet-doc/
+	cp docs/*.dxf debian/glassnet-doc/usr/share/doc/glassnet-doc/
+
+
+	dh_strip_nondeterminism
+	dh_compress
+	dh_fixperms
+	dh_missing
+	dh_dwz
+	dh_strip
+	dh_makeshlibs
+	dh_shlibdeps
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+%:	
+	dh $@
