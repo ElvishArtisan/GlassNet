@@ -4,7 +4,7 @@ dnl Autoconf configuration
 dnl
 dnl Use autoconf to process this into a configure script
 dnl
-dnl   (C) Copyright 2014-2022 Fred Gleason <fredg@paravelsystems.com>
+dnl   (C) Copyright 2014-2025 Fred Gleason <fredg@paravelsystems.com>
 dnl
 dnl   This program is free software; you can redistribute it and/or modify
 dnl   it under the terms of the GNU General Public License version 2 as
@@ -46,16 +46,34 @@ esac
 #
 # Option Switches
 #
+dnl Example of default-disabled feature
 AC_ARG_ENABLE(docbook,[  --disable-docbook       disable building of DocBook documentation],[DOCBOOK_DISABLED=yes],[])
+
+AC_ARG_ENABLE([gncd],
+    AS_HELP_STRING([--disable-gncd], [Do not build receiver component.]))
+AS_IF([test "x$enable_gncd" != "xno"], [
+  BUILD_GNCD=yes
+])
+AM_CONDITIONAL([GNCD_AM],[test "x$enable_gncd" != "xno"])
+
+AC_ARG_ENABLE([gnmc],
+    AS_HELP_STRING([--disable-gnmc], [Do not build management component.]))
+AS_IF([test "x$enable_gnmc" != "xno"], [
+  BUILD_GNMC=yes
+])
+AM_CONDITIONAL([GNMC_AM],[test "x$enable_gnmc" != "xno"])
+
+AC_ARG_ENABLE([gnmd],
+    AS_HELP_STRING([--disable-gnmd], [Do not build server component.]))
+AS_IF([test "x$enable_gnmd" != "xno"], [
+  BUILD_GNMD=yes
+])
+AM_CONDITIONAL([GNMD_AM],[test "x$enable_gnmd" != "xno"])
 
 #
 # Check for Qt (Mandatory)
 #
 AQ_FIND_QT6(QT6,Core Gui Widgets Network Sql,[],[AC_MSG_ERROR([*** Qt6 not found ***])])
-#PKG_CHECK_MODULES(QT5CLI,Qt5Core Qt5Network Qt5Sql,[],[AC_MSG_ERROR([*** Qt5 CLI components not found ***])])
-#PKG_CHECK_MODULES(QT5GUI,Qt5Core Qt5Gui Qt5Widgets Qt5Network Qt5Sql,[],[AC_MSG_ERROR([*** Qt5 GUI components not found ***])])
-#AC_CHECK_PROG(MOC_NAME,moc-qt5,[moc-qt5],[moc])
-#AC_SUBST(MOC,$MOC_NAME)
 
 #
 # Check for OpenSSL (Mandatory)
@@ -140,6 +158,38 @@ AC_OUTPUT()
 ./link_common.sh gnmc
 ./link_common.sh gnmd
 
+AC_MSG_NOTICE()
+if test $BUILD_GNCD ; then
+  AC_MSG_NOTICE(Build it.)
+else
+  AC_MSG_NOTICE(Dont build it.)
+fi
+AC_MSG_NOTICE(Now enter 'make' to build the software.)
+AC_MSG_NOTICE()
+
+
+AC_MSG_NOTICE()
+AC_MSG_NOTICE("|---------------------------------------------------------|")
+AC_MSG_NOTICE("|         *** GLASSNET CONFIGURATION SUMMARY ***          |")
+AC_MSG_NOTICE("|---------------------------------------------------------|")
+AC_MSG_NOTICE("|                                                         |")
+if test -z $BUILD_GNCD ; then
+AC_MSG_NOTICE("|      Build Stream Receiver Component (gncd(1)) ... No   |")
+else
+AC_MSG_NOTICE("|      Build Stream Receiver Component (gncd(1)) ... Yes  |")
+fi
+if test -z $BUILD_GNMC ; then
+AC_MSG_NOTICE("|           Build Management Component (gnmc(1)) ... No   |")
+else
+AC_MSG_NOTICE("|           Build Management Component (gnmc(1)) ... Yes  |")
+fi
+if test -z $BUILD_GNMD ; then
+AC_MSG_NOTICE("|               Build Server Component (gnmd(8)) ... No   |")
+else
+AC_MSG_NOTICE("|               Build Server Component (gnmd(8)) ... Yes  |")
+fi
+AC_MSG_NOTICE("|---------------------------------------------------------|")
+AC_MSG_NOTICE()
 AC_MSG_NOTICE()
 AC_MSG_NOTICE(Now enter 'make' to build the software.)
 AC_MSG_NOTICE()

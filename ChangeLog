@@ -337,3 +337,6 @@
 	* Cleaned up compiler warnings in gnmc(8).
 2025-04-09 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the Qt5 dependency to Qt6.
+2025-04-10 Fred Gleason <fredg@paravelsystems.com>
+	* Added '--disable-gncd', '--disable-gnmc' and '--disable-gnmd'
+	switches to the 'configure' script.

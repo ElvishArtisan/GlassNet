@@ -20,10 +20,17 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-SUBDIRS = common\
-          gncd\
-          gnmc\
-          gnmd
+if GNCD_AM
+  GNCD_OPT = gncd
+endif
+if GNMC_AM
+  GNMC_OPT = gnmc
+endif
+if GNMD_AM
+  GNMD_OPT = gnmd
+endif
+
+SUBDIRS = common $(GNCD_OPT) $(GNMC_OPT) $(GNMD_OPT)
 
 CLEANFILES = *~\
              *.idb\
