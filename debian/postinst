@@ -14,6 +14,14 @@ case "$1" in
 		/bin/systemctl enable gnmd.service
 	    fi
 	fi
+	if [ ! -f /etc/glassnet.conf ] ; then
+	    if [ -f /usr/lib/glassnet-server/glassnet-sample.conf ] ; then
+		cp /usr/lib/glassnet-server/glassnet-sample.conf /etc/glassnet.conf
+	    fi
+	    if [ -f /usr/lib/glassnet-mgmnt/glassnet-sample.conf ] ; then
+		cp /usr/lib/glassnet-mgmnt/glassnet-sample.conf /etc/glassnet.conf
+	    fi
+	fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

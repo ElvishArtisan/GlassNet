@@ -19,6 +19,8 @@ binary:
 	mv debian/tmp/usr/bin/gnmc debian/glassnet-mgmnt/usr/bin/
 	mkdir -p debian/glassnet-mgmnt/usr/share/applications
 	mv debian/tmp/usr/share/applications/gnmc.desktop debian/glassnet-mgmnt/usr/share/applications/
+	mkdir -p debian/glassnet-mgmnt/usr/lib/glassnet-mgmnt
+	cp conf/glassnet-sample.conf debian/glassnet-mgmnt/usr/lib/glassnet-mgmnt/
 	mkdir -p debian/glassnet-mgmnt/usr/share/doc/glassnet-mgmnt
 	cp AUTHORS debian/glassnet-mgmnt/usr/share/doc/glassnet-mgmnt/
 	cp ChangeLog debian/glassnet-mgmnt/usr/share/doc/glassnet-mgmnt/
@@ -33,6 +35,8 @@ binary:
 	mv debian/tmp/usr/sbin/gnmd debian/glassnet-server/usr/sbin/
 	mkdir -p debian/glassnet-server/usr/lib/systemd/system
 	mv debian/tmp/usr/lib/systemd/system/gnmd.service debian/glassnet-server/usr/lib/systemd/system/
+	mkdir -p debian/glassnet-server/usr/lib/glassnet-server
+	cp conf/glassnet-sample.conf debian/glassnet-server/usr/lib/glassnet-server/
 	mkdir -p debian/glassnet-server/usr/share/doc/glassnet-server
 	cp AUTHORS debian/glassnet-server/usr/share/doc/glassnet-server/
 	cp ChangeLog debian/glassnet-server/usr/share/doc/glassnet-server/
