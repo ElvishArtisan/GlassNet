@@ -118,7 +118,7 @@ bool Config::openDb(QString *err_msg,bool schema_check)
   config_receiver_callback_port=
     s.value("ReceiverCallbackPort",GLASSNET_RECEIVER_CALLBACK_PORT).toInt();
 
-  QSqlDatabase db=QSqlDatabase::addDatabase("QMYSQL3");
+  QSqlDatabase db=QSqlDatabase::addDatabase("QMYSQL");
   if(!db.isValid()) {
     *err_msg=QObject::tr("Unable to add MySQL database");
     return false;

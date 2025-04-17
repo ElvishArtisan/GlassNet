@@ -354,3 +354,5 @@
 2025-04-17 Fred Gleason <fredg@paravelsystems.com>
 	* Added code to initialize glassnet.conf(5) to the 'glassnet-mgmnt'
 	and 'glassnet-server' DEB packages.
+2025-04-17 Fred Gleason <fredg@paravelsystems.com>
+	* Change the QSQLDatabase driver from 'QMYSQL3' to 'QMYSQL'.
