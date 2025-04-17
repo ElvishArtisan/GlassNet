@@ -346,3 +346,5 @@
 	* Disabled the 'overloaded-virtual' compiler warning. (See
 	discussion at https://gcc.gnu.org/bugzilla/show_bug.cgi?id=109740
 	for rationale).
+2025-04-17 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.8.0.
