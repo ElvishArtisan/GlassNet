@@ -348,3 +348,6 @@
 	for rationale).
 2025-04-17 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.8.0.
+2025-04-17 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a typo in the 'glassgui-receiver' DEB package that caused
+	it to be assigned an arch value of 'any'.
