@@ -20,7 +20,7 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -Wno-strict-aliasing -std=c++17 -fPIC @QT6_CFLAGS@ @OPENSSL_CFLAGS@
+AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -Wno-strict-aliasing -Wno-overloaded-virtual -std=c++17 -fPIC @QT6_CFLAGS@ @OPENSSL_CFLAGS@
 MOC = @QT6_MOC@
 
 # The dependency for qt's Meta Object Compiler (moc)

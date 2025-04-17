@@ -342,3 +342,7 @@
 	switches to the 'configure' script.
 2025-04-10 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'make deb' target.
+2025-04-17 Fred Gleason <fredg@paravelsystems.com>
+	* Disabled the 'overloaded-virtual' compiler warning. (See
+	discussion at https://gcc.gnu.org/bugzilla/show_bug.cgi?id=109740
+	for rationale).
