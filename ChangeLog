@@ -367,3 +367,6 @@
 	DEB package.
 	* Fixed a bug in the 'glassnet-receiver' DEB package that prevented
 	the database from initializing.
+2025-04-18 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in gnmc(1) that threw a SQL error when attempting to
+	create a new event.

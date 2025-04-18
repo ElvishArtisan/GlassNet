@@ -177,10 +177,12 @@ bool Event::receiverIsOnline() const
 int Event::create(int site_id,int chassis_slot,int receiver_slot)
 {
   QString sql=QString("insert into `EVENTS` set ")+
+    "`START_TIME`='00:00:00',"+
     QString::asprintf("`SITE_ID`=%d,",site_id)+
     QString::asprintf("`CHASSIS_SLOT`=%d,",chassis_slot)+
     QString::asprintf("`RECEIVER_SLOT`=%d,",receiver_slot)+
-    "`LENGTH`=0";
+    "`LENGTH`=0,"+
+    "`FEED_ID`=0";
   return SqlQuery::run(sql).toInt();
 }
 
