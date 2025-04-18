@@ -1,5 +1,5 @@
 #!/bin/sh
-# postinst script for GlassNet
+# postinst script for glassnet-server
 
 case "$1" in
     configure)
@@ -7,21 +7,9 @@ case "$1" in
 	    if [ -f /usr/lib/glassnet-server/glassnet-sample.conf ] ; then
 		cp /usr/lib/glassnet-server/glassnet-sample.conf /etc/glassnet.conf
 	    fi
-	    if [ -f /usr/lib/glassnet-mgmnt/glassnet-sample.conf ] ; then
-		cp /usr/lib/glassnet-mgmnt/glassnet-sample.conf /etc/glassnet.conf
-	    fi
-	fi
-	if [ ! -f /etc/gncd.conf ] ; then
-	    if [ -f /usr/lib/glassnet-receiver/gncd-sample.conf ] ; then
-		cp /usr/lib/glassnet-receiver/gncd-sample.conf /etc/gncd.conf
-	    fi
 	fi
 	if [ -x /bin/systemctl ] ; then
 	    /bin/systemctl daemon-reload
-	    if [ -f /usr/lib/systemd/system/gncd.service ] ; then
-		/bin/systemctl start gncd.service
-		/bin/systemctl enable gncd.service
-	    fi
 	    if [ -f /usr/lib/systemd/system/gnmd.service ] ; then
 		/bin/systemctl start gnmd.service
 		/bin/systemctl enable gnmd.service

@@ -27,9 +27,13 @@ EXTRA_DIST = changelog\
              control\
              control.src\
              copyright\
-             postinst\
-             postrm\
-             prerm\
+             glassnet-mgmnt.postinst\
+             glassnet-receiver.postinst\
+             glassnet-receiver.postrm\
+             glassnet-receiver.prerm\
+             glassnet-server.postinst\
+             glassnet-server.postrm\
+             glassnet-server.prerm\
              rules
 
 MAINTAINERCLEANFILES = changelog\
