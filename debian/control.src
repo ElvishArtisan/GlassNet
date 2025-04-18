@@ -19,7 +19,7 @@ Description: Managment GUI components for the GlassNet audio streaming system.
 
 Package: glassnet-receiver
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, glassplayer
+Depends: ${shlibs:Depends}, ${misc:Depends}, glassplayer, libqt6sql6-sqlite
 Description: Stream receiver control layer for the GlassNet audio streaming system.
  Stream receiver control for GlassNet.
 

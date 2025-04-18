@@ -3,6 +3,7 @@
 
 case "$1" in
     configure)
+	mkdir -p /var/gncd
 	if [ ! -f /etc/gncd.conf ] ; then
 	    if [ -f /usr/lib/glassnet-receiver/gncd-sample.conf ] ; then
 		cp /usr/lib/glassnet-receiver/gncd-sample.conf /etc/gncd.conf
