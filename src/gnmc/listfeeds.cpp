@@ -60,6 +60,8 @@ ListFeeds::ListFeeds(QWidget *parent)
   list_model->setHeaderData(2,Qt::Horizontal,tr("URL"));
   list_view=new TableView(this);
   list_view->setModel(list_model);
+  list_view->hideColumn(3);
+
   list_view->resizeColumnsToContents();
   connect(list_view,SIGNAL(doubleClicked(const QModelIndex &)),
 	  this,SLOT(doubleClickedData(const QModelIndex &)));
