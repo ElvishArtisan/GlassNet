@@ -51,6 +51,8 @@ binary:
 	mv debian/tmp/usr/sbin/gncd debian/glassnet-receiver/usr/sbin/
 	mkdir -p debian/glassnet-receiver/usr/lib/systemd/system
 	mv debian/tmp/usr/lib/systemd/system/gncd.service debian/glassnet-receiver/usr/lib/systemd/system/
+	mkdir -p debian/glassnet-receiver/usr/lib/glassnet-receiver
+	cp conf/gncd-sample.conf debian/glassnet-receiver/usr/lib/glassnet-receiver/
 	mkdir -p debian/glassnet-receiver/usr/share/doc/glassnet-receiver
 	cp AUTHORS debian/glassnet-receiver/usr/share/doc/glassnet-receiver/
 	cp ChangeLog debian/glassnet-receiver/usr/share/doc/glassnet-receiver/
