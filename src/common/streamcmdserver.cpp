@@ -120,14 +120,14 @@ StreamCmdServer::StreamCmdServer(const std::map<int,QString> &cmd_table,
   // Mappers
   //
   cmd_read_mapper=new QSignalMapper(this);
-  connect(cmd_read_mapper,SIGNAL(mapped(int)),this,SLOT(readyReadData(int)));
+  connect(cmd_read_mapper,SIGNAL(mappedInt(int)),this,SLOT(readyReadData(int)));
 
   cmd_closed_mapper=new QSignalMapper(this);
-  connect(cmd_closed_mapper,SIGNAL(mapped(int)),
+  connect(cmd_closed_mapper,SIGNAL(mappedInt(int)),
 	  this,SLOT(connectionClosedData(int)));
 
   cmd_pending_connected_mapper=new QSignalMapper(this);
-  connect(cmd_pending_connected_mapper,SIGNAL(mapped(int)),
+  connect(cmd_pending_connected_mapper,SIGNAL(mappedInt(int)),
 	  this,SLOT(pendingConnectedData(int)));
 
   //

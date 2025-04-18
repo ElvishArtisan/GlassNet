@@ -370,3 +370,5 @@
 2025-04-18 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug in gnmc(1) that threw a SQL error when attempting to
 	create a new event.
+2025-04-18 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed bugs in gnmd(8) that threw 'no such signal' errors.
