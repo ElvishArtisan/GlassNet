@@ -375,3 +375,5 @@
 2025-04-18 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug in gnmc(1) that caused garbage to appear in
 	feed entries in the 'List Feeds' dialog.
+2025-04-18 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed 'no such signal' errors in 'src/common/streamcmdserver.cpp'.
