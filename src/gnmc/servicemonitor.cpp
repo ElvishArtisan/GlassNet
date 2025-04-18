@@ -2,7 +2,7 @@
 //
 // Heartbeat monitor for the gnmd(8) service.
 //
-//   (C) Copyright 2017-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2017-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -43,17 +43,32 @@ bool ServiceMonitor::isActive() const
 void ServiceMonitor::start()
 {
   monitor_timer->start(GLASSNET_GNMD_TIMESTAMP_INTERVAL);
+
+  QString sql=QString("select `SYSTEM_TZID` from `VERSION`");
+  SqlQuery *q=new SqlQuery(sql);
+  if(q->first()) {
+    monitor_tz_name=q->value(0).toString();
+  }
+  else {
+    monitor_tz_name="UTC";
+  }
+  delete q;
+  monitor_tz_map=new TzMap();
+  monitor_tz_map->load(TZMAP_ZONEINFO_DIR+"/"+monitor_tz_name);
+
   timerData();
 }
 
 
 void ServiceMonitor::timerData()
 {
+  QDateTime now=monitor_tz_map->convert(QDateTime::currentDateTimeUtc(),&monitor_tz_name);
+
   QString sql=QString("select `GNMD_TIMESTAMP` from `VERSION` where ")+
     "`GNMD_TIMESTAMP`>\""+
-    SqlQuery::escape(QDateTime::currentDateTime().
-		     addMSecs(-2*GLASSNET_GNMD_TIMESTAMP_INTERVAL).
+    SqlQuery::escape(now.addMSecs(-2*GLASSNET_GNMD_TIMESTAMP_INTERVAL).
 		     toString("yyyy=MM-dd hh:mm:ss"))+"\"";
+  printf("SQL: %s\n",sql.toUtf8().constData());
   SqlQuery *q=new SqlQuery(sql);
   int state=q->first();
   delete q;

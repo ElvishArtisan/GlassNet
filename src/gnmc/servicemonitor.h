@@ -2,7 +2,7 @@
 //
 // Heartbeat monitor for the gnmd(8) service.
 //
-//   (C) Copyright 2017 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2017-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -24,6 +24,8 @@
 #include <QObject>
 #include <QTimer>
 
+#include "tzmap.h"
+
 class ServiceMonitor : public QObject
 {
   Q_OBJECT
@@ -41,6 +43,8 @@ class ServiceMonitor : public QObject
  private:
   int monitor_state;
   QTimer *monitor_timer;
+  TzMap *monitor_tz_map;
+  QString monitor_tz_name;
 };
 
 
