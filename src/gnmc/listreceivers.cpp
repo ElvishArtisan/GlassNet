@@ -49,22 +49,6 @@ ListReceivers::ListReceivers(QWidget *parent)
   connect(list_remarks_check,SIGNAL(toggled(bool)),
 	  list_model,SLOT(setShowRemarks(bool)));
 
-  /*
-  QString sql=QString("select ")+
-    "`RECEIVERS`.`ID`,"+                 // 00
-    "`RECEIVERS`.`ONLINE`,"+             // 01
-    "`SITES`.`NAME`,"+                   // 02
-    "`CHASSIS`.`SLOT`,"+                 // 03
-    "`RECEIVERS`.`SLOT`,"+               // 04
-    "`RECEIVERS`.`TYPE`,"+               // 05
-    "`RECEIVERS`.`MAC_ADDRESS`,"+        // 06
-    "`RECEIVERS`.`LAST_SEEN`,"+          // 07
-    "`RECEIVERS`.`PUBLIC_ADDRESS`,"+     // 08
-    "`RECEIVERS`.`INTERFACE_ADDRESS`,"+  // 09
-    "`RECEIVERS`.`FIRMWARE_VERSION`,"+   // 10
-    "`RECEIVERS`.`UPDATE_FIRMWARE`,"+    // 11
-    "`RECEIVERS`.`REMARKS` "+            // 12
-  */
   QString sql=SqlFields()+
     "from `RECEIVERS` left join `CHASSIS` "+
     "on `RECEIVERS`.`CHASSIS_ID`=`CHASSIS`.`ID` left join `SITES` "+
@@ -94,13 +78,20 @@ ListReceivers::ListReceivers(QWidget *parent)
   list_model->setHeaderData(12,Qt::Horizontal,tr("Remarks"));
   //  list_model->setFieldType(12,SqlTableModel::BooleanType);
   list_view=new TableView(this);
+  list_view->setSelectionMode(QAbstractItemView::ExtendedSelection);
   list_view->setModel(list_model);
   list_view->hideColumn(0);
   list_view->hideColumn(12);
   list_view->resizeColumnsToContents();
   connect(list_view,SIGNAL(doubleClicked(const QModelIndex &)),
 	  this,SLOT(doubleClickedData(const QModelIndex &)));
-
+  connect(list_view->selectionModel(),
+	  SIGNAL(selectionChanged(const QItemSelection &,
+				  const QItemSelection &)),
+	  this,
+	  SLOT(selectionChangedData(const QItemSelection &,
+				    const QItemSelection &)));
+  
   list_add_button=new QPushButton(tr("Add"),this);
   list_add_button->setFont(bold_font);
   connect(list_add_button,SIGNAL(clicked()),this,SLOT(addData()));
@@ -142,21 +133,6 @@ QSize ListReceivers::sizeHint() const
 
 int ListReceivers::exec()
 {
-  /*
-  QString sql=QString("select ")+
-    "`RECEIVERS`.`ID`,"+
-    "`RECEIVERS`.`ONLINE`,"+
-    "`SITES`.`NAME`,"+
-    "`CHASSIS`.`SLOT`,"+
-    "`RECEIVERS`.`SLOT`,"+
-    "`RECEIVERS`.`TYPE`,"+
-    "`RECEIVERS`.`MAC_ADDRESS`,"+
-    "`RECEIVERS`.`LAST_SEEN`,"+
-    "`RECEIVERS`.`PUBLIC_ADDRESS`,"+
-    "`RECEIVERS`.`INTERFACE_ADDRESS`,"+
-    "`RECEIVERS`.`FIRMWARE_VERSION`,"+
-    "`RECEIVERS`.`UPDATE_FIRMWARE` "+
-  */
   QString sql=SqlFields()+
     "from `RECEIVERS` left join `CHASSIS` "+
     "on `RECEIVERS`.`CHASSIS_ID`=`CHASSIS`.`ID` left join `SITES` "+
@@ -166,27 +142,13 @@ int ListReceivers::exec()
   list_model->setQuery(sql,12);
   list_view->resizeColumnsToContents();
   list_update_timer->start(5000);
+  selectionChangedData(QItemSelection(),QItemSelection());
   return QDialog::exec();
 }
 
 
 int ListReceivers::exec(int receiver_id)
 {
-  /*
-  QString sql=QString("select ")+
-    "`RECEIVERS`.`ID`,"+
-    "`RECEIVERS`.`ONLINE`,"+
-    "`SITES`.`NAME`,"+
-    "`CHASSIS`.`SLOT`,"+
-    "`RECEIVERS`.`SLOT`,"+
-    "`RECEIVERS`.`TYPE`,"+
-    "`RECEIVERS`.`MAC_ADDRESS`,"+
-    "`RECEIVERS`.`LAST_SEEN`,"+
-    "`RECEIVERS`.`PUBLIC_ADDRESS`,"+
-    "`RECEIVERS`.`INTERFACE_ADDRESS`,"+
-    "`RECEIVERS`.`FIRMWARE_VERSION`,"+
-    "`RECEIVERS`.`UPDATE_FIRMWARE` "+
-  */
   QString sql=SqlFields()+
     "from `RECEIVERS` left join `CHASSIS` "+
     "on `RECEIVERS`.`CHASSIS_ID`=`CHASSIS`.`ID` left join `SITES` "+
@@ -197,6 +159,7 @@ int ListReceivers::exec(int receiver_id)
   list_model->setQuery(sql,12);
   list_view->resizeColumnsToContents();
   list_update_timer->start(5000);
+  selectionChangedData(QItemSelection(),QItemSelection());
   return QDialog::exec();
 }
 
@@ -274,6 +237,16 @@ void ListReceivers::deleteData()
 }
 
 
+void ListReceivers::selectionChangedData(const QItemSelection &new_sel,
+					 const QItemSelection &old_sel)
+{
+  int rows=list_view->selectionModel()->selectedRows().size();
+  list_edit_button->setEnabled(rows==1);
+  list_delete_button->setEnabled(rows==1);
+  list_update_button->setEnabled(rows>0);
+}
+
+
 void ListReceivers::doubleClickedData(const QModelIndex &index)
 {
   editData();
@@ -287,7 +260,7 @@ void ListReceivers::updateData()
     int receiver_id=s->selectedRows()[0].data().toInt();
     Receiver *rcvr=new Receiver(receiver_id);
     if(QMessageBox::question(this,tr("GlassNet - Receiver Reboot"),
-			     tr("This will cause the receiver to be rebooted.")+
+			     tr("This will cause all selected receivers to be rebooted.")+
 			     "\n"+tr("Continue?"),
 			     QMessageBox::Yes,QMessageBox::No)!=
        QMessageBox::Yes) {

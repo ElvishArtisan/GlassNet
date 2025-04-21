@@ -47,6 +47,8 @@ class ListReceivers : public ListDialog
   void addData();
   void editData();
   void deleteData();
+  void selectionChangedData(const QItemSelection &new_sel,
+			    const QItemSelection &old_sel);
   void doubleClickedData(const QModelIndex &index);
   void updateData();
   void closeData();

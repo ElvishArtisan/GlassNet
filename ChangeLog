@@ -383,3 +383,6 @@
 	non-UTC values.
 2025-04-21 Fred Gleason <fredg@paravelsystems.com>
 	* Added support for updating gncd(1) via apt(8).
+2025-04-21 Fred Gleason <fredg@paravelsystems.com>
+	* Modified gnmc(1) to allow multiple receivers to be selected for
+	firmware upgrade.
