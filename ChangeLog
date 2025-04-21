@@ -386,3 +386,5 @@
 2025-04-21 Fred Gleason <fredg@paravelsystems.com>
 	* Modified gnmc(1) to allow multiple receivers to be selected for
 	firmware upgrade.
+2025-04-21 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.8.1.

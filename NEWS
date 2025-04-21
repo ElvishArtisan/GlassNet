@@ -1,6 +1,11 @@
 This is the NEWS file for the GlassNet package.
 
 -------------------------------------------------------------------------------
+v0.8.1 -- 21 April 2025
+
+Changes:
+   Baseline for DEB package support.
+-------------------------------------------------------------------------------
 v0.8.0 -- 17 April 2025
 
 Changes:
