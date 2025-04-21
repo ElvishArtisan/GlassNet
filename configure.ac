@@ -114,6 +114,68 @@ fi
 #
 AR_GET_DISTRO()
 AC_SUBST(DISTRO,$ar_gcc_distro)
+AC_MSG_NOTICE($ar_distro_id)
+DISTRO_NAME="|                         Distribution Name ... Unknown     |"
+case "$ar_distro_package_type" in
+     deb)
+     AC_DEFINE(HAVE_DEB)
+     ;;
+
+     rpm)
+     AC_DEFINE(HAVE_RPM)
+     ;;
+esac
+case "$ar_distro_id" in
+     debian)
+       AC_MSG_NOTICE([Distro is Debian-ish])
+       DISTRO_FAMILY="|                       Distribution Family ... Debian      |"
+       DISTRO_IS_DEBIANISH=yes
+       DISTRO_NAME="|                         Distribution Name ... Debian      |"
+     ;;
+
+     raspbian)
+       AC_MSG_NOTICE([Distro is Debian-ish])
+       DISTRO_FAMILY="|                       Distribution Family ... Debian      |"
+       DISTRO_IS_DEBIANISH=yes
+       DISTRO_NAME="|                  Distribution Name ... Raspberry Pi OS    |"
+     ;;
+
+     linuxmint)
+       AC_MSG_NOTICE([Distro is Debian-ish])
+       DISTRO_FAMILY="|                       Distribution Family ... Debian      |"
+       DISTRO_IS_DEBIANISH=yes
+       DISTRO_NAME="|                         Distribution Name ... Linux Mint  |"
+     ;;
+
+     ubuntu)
+       AC_MSG_NOTICE([Distro is Debian-ish])
+       DISTRO_FAMILY="|                       Distribution Family ... Debian      |"
+       DISTRO_IS_DEBIANISH=yes
+       DISTRO_NAME="|                         Distribution Name ... Ubuntu      |"
+     ;;
+
+     centos|fedora|rhel|rocky)
+       AC_MSG_NOTICE([Distro is RedHat-ish])
+       DISTRO_FAMILY="|                       Distribution Family ... RedHat      |"
+       if test $ar_distro_id = "centos" ; then
+         DISTRO_NAME="|                         Distribution Name ... CentOS      |"
+       fi
+       if test $ar_distro_id = "fedora" ; then
+         DISTRO_NAME="|                         Distribution Name ... Fedora      |"
+       fi
+       if test $ar_distro_id = "rhel" ; then
+         DISTRO_NAME="|                         Distribution Name ... RHEL        |"
+       fi
+       if test $ar_distro_id = "rocky" ; then
+         DISTRO_NAME="|                         Distribution Name ... Rocky       |"
+       fi
+       ;;
+
+     *)
+       AC_MSG_NOTICE([Distro is unknown])
+       DISTRO_FAMILY="|                       Distribution Family ... Unknown     |"
+     ;;
+esac
 
 #
 # Configure RPM Build
@@ -179,26 +241,30 @@ chmod 755 build_debs.sh
 ./link_common.sh gnmd
 
 AC_MSG_NOTICE()
-AC_MSG_NOTICE("|---------------------------------------------------------|")
-AC_MSG_NOTICE("|         *** GLASSNET CONFIGURATION SUMMARY ***          |")
-AC_MSG_NOTICE("|---------------------------------------------------------|")
-AC_MSG_NOTICE("|                                                         |")
+AC_MSG_NOTICE("|-----------------------------------------------------------|")
+AC_MSG_NOTICE("|          *** GLASSNET CONFIGURATION SUMMARY ***           |")
+AC_MSG_NOTICE("|-----------------------------------------------------------|")
+AC_MSG_NOTICE("| Platform Information:                                     |")
+AC_MSG_NOTICE("$DISTRO_NAME")
+AC_MSG_NOTICE("$DISTRO_FAMILY")
+AC_MSG_NOTICE("|                                                           |")
+AC_MSG_NOTICE("| Component Build Status:                                   |")
 if test -z $BUILD_GNCD ; then
-AC_MSG_NOTICE("|      Build Stream Receiver Component (gncd(1)) ... No   |")
+AC_MSG_NOTICE("|        Build Stream Receiver Component (gncd(1)) ... No   |")
 else
-AC_MSG_NOTICE("|      Build Stream Receiver Component (gncd(1)) ... Yes  |")
+AC_MSG_NOTICE("|        Build Stream Receiver Component (gncd(1)) ... Yes  |")
 fi
 if test -z $BUILD_GNMC ; then
-AC_MSG_NOTICE("|           Build Management Component (gnmc(1)) ... No   |")
+AC_MSG_NOTICE("|             Build Management Component (gnmc(1)) ... No   |")
 else
-AC_MSG_NOTICE("|           Build Management Component (gnmc(1)) ... Yes  |")
+AC_MSG_NOTICE("|             Build Management Component (gnmc(1)) ... Yes  |")
 fi
 if test -z $BUILD_GNMD ; then
-AC_MSG_NOTICE("|               Build Server Component (gnmd(8)) ... No   |")
+AC_MSG_NOTICE("|                 Build Server Component (gnmd(8)) ... No   |")
 else
-AC_MSG_NOTICE("|               Build Server Component (gnmd(8)) ... Yes  |")
+AC_MSG_NOTICE("|                 Build Server Component (gnmd(8)) ... Yes  |")
 fi
-AC_MSG_NOTICE("|---------------------------------------------------------|")
+AC_MSG_NOTICE("|-----------------------------------------------------------|")
 AC_MSG_NOTICE()
 AC_MSG_NOTICE()
 AC_MSG_NOTICE(Now enter 'make' to build the software.)

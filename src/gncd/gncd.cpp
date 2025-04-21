@@ -378,6 +378,19 @@ void MainObject::updateFinishedData(int exit_code,QProcess::ExitStatus status)
     exit(256);
   }
 
+#ifdef HAVE_DEB
+  args.push_back("-y");
+  args.push_back("upgrade");
+  p=new QProcess(this);
+  connect(p,SIGNAL(finished(int,QProcess::ExitStatus)),
+	  this,SLOT(updateFinishedData(int,QProcess::ExitStatus)));
+  connect(p,SIGNAL(error(QProcess::ProcessError)),
+	  this,SLOT(updateErrorData(QProcess::ProcessError)));
+  gncd_update_pass=1;
+  p->start("/usr/bin/apt",args);
+#endif  // HAVE_DEB
+
+#ifdef HAVE_RPM
   args.push_back("-q");
   args.push_back("-y");
   args.push_back("update");
@@ -387,7 +400,8 @@ void MainObject::updateFinishedData(int exit_code,QProcess::ExitStatus status)
   connect(p,SIGNAL(error(QProcess::ProcessError)),
 	  this,SLOT(updateErrorData(QProcess::ProcessError)));
   gncd_update_pass=1;
-  p->start("/usr/bin/yum",args);  
+  p->start("/usr/bin/yum",args);
+#endif  // HAVE_RPM
 }
 
 
@@ -588,6 +602,19 @@ void MainObject::ProcessUpdate(int id)
   QStringList args;
   QProcess *p=NULL;
 
+#ifdef HAVE_DEB
+  args.push_back("-y");
+  args.push_back("update");
+  p=new QProcess(this);
+  connect(p,SIGNAL(finished(int,QProcess::ExitStatus)),
+	  this,SLOT(updateFinishedData(int,QProcess::ExitStatus)));
+  connect(p,SIGNAL(error(QProcess::ProcessError)),
+	  this,SLOT(updateErrorData(QProcess::ProcessError)));
+  gncd_update_pass=0;
+  p->start("/usr/bin/apt",args);
+#endif  // HAVE_DEB
+
+#ifdef HAVE_RPM
   args.push_back("-q");
   args.push_back("-y");
   args.push_back("clean");
@@ -599,6 +626,7 @@ void MainObject::ProcessUpdate(int id)
 	  this,SLOT(updateErrorData(QProcess::ProcessError)));
   gncd_update_pass=0;
   p->start("/usr/bin/yum",args);
+#endif  // HAVE_RPM
 }
 
 

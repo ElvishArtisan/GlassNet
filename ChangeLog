@@ -381,3 +381,5 @@
 	* Fixed a bug in gnmc(1) that caused the 'Service Health' indicator
 	to display inaccurate state when the local timezone was set to
 	non-UTC values.
+2025-04-21 Fred Gleason <fredg@paravelsystems.com>
+	* Added support for updating gncd(1) via apt(8).
