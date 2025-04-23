@@ -396,3 +396,6 @@
 2025-04-23 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug in gncd(8) that failed to completely clean up after
 	processing an online update operation.
+2025-04-23 Fred Gleason <fredg@paravelsystems.com>
+	* Modified the 'List Receivers' dialog in gnmc(1) to permit multiple
+	receivers to be selected for firmware update simultaneously.

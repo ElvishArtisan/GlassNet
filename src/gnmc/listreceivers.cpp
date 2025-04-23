@@ -255,20 +255,19 @@ void ListReceivers::doubleClickedData(const QModelIndex &index)
 
 void ListReceivers::updateData()
 {
-  QItemSelectionModel *s=list_view->selectionModel();
-  if(s->hasSelection()) {
-    int receiver_id=s->selectedRows()[0].data().toInt();
-    Receiver *rcvr=new Receiver(receiver_id);
-    if(QMessageBox::question(this,tr("GlassNet - Receiver Reboot"),
-			     tr("This will cause all selected receivers to be rebooted.")+
-			     "\n"+tr("Continue?"),
-			     QMessageBox::Yes,QMessageBox::No)!=
-       QMessageBox::Yes) {
+  if(QMessageBox::question(this,tr("GlassNet - Receiver Reboot"),
+			   tr("This will cause all selected receivers to be rebooted.")+
+			   "\n"+tr("Continue?"),
+			   QMessageBox::Yes,QMessageBox::No)==
+     QMessageBox::Yes) {
+
+    QModelIndexList rows=list_view->selectionModel()->selectedRows();
+    for(int i=0;i<rows.size();i++) {
+      int receiver_id=rows.at(i).data().toInt();
+      Receiver *rcvr=new Receiver(receiver_id);
+      rcvr->setUpdateFirmware(true);
       delete rcvr;
-      return;
     }
-    rcvr->setUpdateFirmware(true);
-    delete rcvr;
     list_model->update();
   }
 }
