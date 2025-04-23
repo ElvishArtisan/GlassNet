@@ -391,3 +391,5 @@
 2025-04-23 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed bugs in gncd(8) that caused remote upgrade requests to fail
 	while causing corrupt DEB package installation.
+2025-04-23 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.8.2.
