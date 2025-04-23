@@ -1,7 +1,7 @@
 This is the NEWS file for the GlassNet package.
 
 -------------------------------------------------------------------------------
-v0.8.2 -- 23 April 2025
+v0.8.3 -- 23 April 2025
 
 Changes:
    Fixed remote firmware updates for receivers.
