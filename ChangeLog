@@ -393,3 +393,6 @@
 	while causing corrupt DEB package installation.
 2025-04-23 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.8.2.
+2025-04-23 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in gncd(8) that failed to completely clean up after
+	processing an online update operation.

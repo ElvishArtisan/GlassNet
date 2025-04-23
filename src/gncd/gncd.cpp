@@ -2,7 +2,7 @@
 //
 // gncd(1) client daemon for GlassNet
 //
-//   (C) Copyright 2016-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -636,6 +636,8 @@ void MainObject::ProcessUpdate(int id)
       fprintf(f,"/usr/bin/apt -y update\n");
       fprintf(f,"/usr/bin/apt -y upgrade\n");
       fprintf(f,"/usr/sbin/reboot\n");
+      fprintf(f,"/bin/unlink %s\n",GNCD_UPGRADE_CRON_ENTRY);
+
       fclose(f);
       chmod(temppath.toUtf8(),0775);
     }
@@ -657,8 +659,6 @@ void MainObject::ProcessUpdate(int id)
 #ifdef HAVE_RPM
   QStringList args;
   QProcess *p=NULL;
-
-  unlink(GNCD_UPGRADE_CRON_ENTRY);
 
   args.push_back("-q");
   args.push_back("-y");
