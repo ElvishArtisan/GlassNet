@@ -53,6 +53,7 @@ class MainObject : public QObject
   void updateErrorData(QProcess::ProcessError err);
   void stopData();
   void pingData();
+  void rebootData();
 
  private:
   bool ProcessDelete(int id,const QStringList &args);

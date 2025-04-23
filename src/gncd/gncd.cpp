@@ -24,6 +24,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <syslog.h>
 #include <unistd.h>
 
@@ -40,6 +42,8 @@
 #include "db.h"
 #include "paths.h"
 #include "tzmap.h"
+
+#define GNCD_UPGRADE_CRON_ENTRY "/etc/cron.d/gncd-upgrade"
 
 MainObject::MainObject(QObject *parent)
   : QObject(parent)
@@ -374,8 +378,10 @@ void MainObject::updateFinishedData(int exit_code,QProcess::ExitStatus status)
   QProcess *p=NULL;
 
   if(gncd_update_pass>0) {
-    Reboot();
-    exit(256);
+    QTimer *timer=new QTimer(this);
+    timer->setSingleShot(true);
+    connect(timer,SIGNAL(timeout()),this,SLOT(rebootData()));
+    timer->start(60000);
   }
 
 #ifdef HAVE_DEB
@@ -432,6 +438,13 @@ void MainObject::pingData()
     args.push_back(VERSION);
     gncd_cmd_server->sendCommand(MainObject::Addr,args);
   }
+}
+
+
+void MainObject::rebootData()
+{
+  Reboot();
+  exit(256);
 }
 
 
@@ -599,22 +612,54 @@ void MainObject::ProcessPlaystart(int id,const QStringList &args)
 
 void MainObject::ProcessUpdate(int id)
 {
-  QStringList args;
-  QProcess *p=NULL;
-
 #ifdef HAVE_DEB
-  args.push_back("-y");
-  args.push_back("update");
-  p=new QProcess(this);
-  connect(p,SIGNAL(finished(int,QProcess::ExitStatus)),
-	  this,SLOT(updateFinishedData(int,QProcess::ExitStatus)));
-  connect(p,SIGNAL(error(QProcess::ProcessError)),
-	  this,SLOT(updateErrorData(QProcess::ProcessError)));
-  gncd_update_pass=0;
-  p->start("/usr/bin/apt",args);
+  //
+  // Maintainer's Note
+  //
+  // The 'upgrade' command for apt(1) must not be issued by a process
+  // inherited from the 'glassnet-receiver' package, otherwise the upgrade
+  // will be interrupted if that package attempts to upgrade itself, resulting
+  // in a corrupt installation. Hence, we schedule a cron job to trigger
+  // the upgrade.
+  //
+
+  //
+  // Create Upgrade Script
+  //
+  char temp_dir[]={"/tmp/upgrade_gncd_XXXXXX"};
+  if(mkdtemp(temp_dir)!=NULL) {
+    QString temppath=QString(temp_dir)+"/upgrade_gncd.sh";
+    FILE *f=fopen(temppath.toUtf8(),"w");
+    if(f!=NULL) {
+      fprintf(f,"#!/bin/bash\n");
+      fprintf(f,"\n");
+      fprintf(f,"/usr/bin/apt -y update\n");
+      fprintf(f,"/usr/bin/apt -y upgrade\n");
+      fprintf(f,"/usr/sbin/reboot\n");
+      fclose(f);
+      chmod(temppath.toUtf8(),0775);
+    }
+
+    //
+    // Create cron(5) Entry
+    //
+    if((f=fopen(GNCD_UPGRADE_CRON_ENTRY,"w"))!=NULL) {
+      QDateTime dt=QDateTime::currentDateTime().addSecs(60);
+      fprintf(f,"SHELL=/bin/bash\n");
+      fprintf(f,"\n");
+      fprintf(f,"%d %d * * *\troot\t%s\n",dt.time().minute(),dt.time().hour(),
+	      temppath.toUtf8().constData());
+      fclose(f);
+    }
+  }
 #endif  // HAVE_DEB
 
 #ifdef HAVE_RPM
+  QStringList args;
+  QProcess *p=NULL;
+
+  unlink(GNCD_UPGRADE_CRON_ENTRY);
+
   args.push_back("-q");
   args.push_back("-y");
   args.push_back("clean");

@@ -6,7 +6,6 @@
 *.dsc
 *.o
 *.rpm
-*.service
 *.spec
 *.tar.gz
 *.tar.xz
@@ -54,7 +53,6 @@ src/gncd/tzmap.cpp
 src/gncd/tzmap.h
 src/gncd/user.cpp
 src/gncd/user.h
-
 src/gnmc/accessor.h
 src/gnmc/accessor.cpp
 src/gnmc/chassis.cpp
@@ -81,7 +79,6 @@ src/gnmc/tzmap.cpp
 src/gnmc/tzmap.h
 src/gnmc/user.cpp
 src/gnmc/user.h
-
 src/gnmd/accessor.h
 src/gnmd/accessor.cpp
 src/gnmd/chassis.cpp
@@ -108,3 +105,5 @@ src/gnmd/tzmap.cpp
 src/gnmd/tzmap.h
 src/gnmd/user.cpp
 src/gnmd/user.h
+systemd/gncd.service
+systemd/gnmd.service

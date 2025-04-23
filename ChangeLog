@@ -388,3 +388,6 @@
 	firmware upgrade.
 2025-04-21 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.8.1.
+2025-04-23 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed bugs in gncd(8) that caused remote upgrade requests to fail
+	while causing corrupt DEB package installation.
