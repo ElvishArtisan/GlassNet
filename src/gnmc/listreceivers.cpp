@@ -305,7 +305,7 @@ QString ListReceivers::SqlFields() const
     "`RECEIVERS`.`ID`,"+                 // 00
     "`RECEIVERS`.`ONLINE`,"+             // 01
     "`SITES`.`NAME`,"+                   // 02
-    "`CHASSIS`.`SLOT`,"+                 // 03
+    "`CHASSIS`.`SERIAL_NUMBER`,"+        // 03
     "`RECEIVERS`.`SLOT`,"+               // 04
     "`RECEIVERS`.`TYPE`,"+               // 05
     "`RECEIVERS`.`MAC_ADDRESS`,"+        // 06

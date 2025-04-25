@@ -45,7 +45,7 @@ change it to match, then reboot the host.
 
 UPDATE
 
-Run 'yum -y update' and then reboot the host.
+Run a full software update of all packages on the client system, then reboot.
 
 
 

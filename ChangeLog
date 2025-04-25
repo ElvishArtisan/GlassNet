@@ -401,3 +401,7 @@
 	receivers to be selected for firmware update simultaneously.
 2025-04-23 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.8.3.
+2025-04-25 Fred Gleason <fredg@paravelsystems.com>
+	* Changed the parameter of the 'Chassis' column in the 'List
+	Receivers' dialog' in gnmc(1) from the the chassis ID to the
+	chassis serial number.
