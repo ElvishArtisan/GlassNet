@@ -409,6 +409,16 @@ bool MainWidget::CheckSchema()
     }
   }
 
+  if(schema<22) {
+    sql=QString("alter table `RECEIVERS` ")+
+      "add column `DEFAULT_FEED_POSTED` enum('N','Y') default 'N' "+
+      "after `DEFAULT_FEED_ID`";
+    SqlQuery::run(sql,&ok);
+    if(!ok) {
+      return false;
+    }
+  }
+
 
 
   //

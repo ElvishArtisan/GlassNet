@@ -418,3 +418,7 @@
 	gnmc(1).
 	* Added a 'Default Feed ' control to the 'Edit Receiver' dialog in
 	gnmc(1).
+2025-04-25 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'RECEIVERS.DEFAULT_FEED_POSTED' field to the management
+	database schema.
+	* Incremented the management database version to 22.

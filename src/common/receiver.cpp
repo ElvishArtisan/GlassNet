@@ -148,12 +148,24 @@ int Receiver::defaultFeedId() const
 
 void Receiver::setDefaultFeedId(int id) const
 {
+  QString sql;
+
   if(id>0) {
-    setRow("DEFAULT_FEED_ID",id);
+    sql=QString("update `RECEIVERS` set ")+
+      QString::asprintf("`DEFAULT_FEED_ID`=%d where ",id);
   }
   else {
-    setRowNull("DEFAULT_FEED_ID");
+    sql=QString("update `RECEIVERS` set ")+
+      "`DEFAULT_FEED_ID`=NULL where ";
   }
+  sql+=QString::asprintf("`ID`=%d",receiver_id);
+  SqlQuery *q=new SqlQuery(sql);
+  if(q->numRowsAffected()>0) {
+    sql=QString("update `RECEIVERS` set DEFAULT_FEED_POSTED='N' where ")+
+      QString::asprintf("`ID`=%d",receiver_id);
+    SqlQuery::run(sql);
+  }
+  delete q;
 }
 
 
