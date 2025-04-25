@@ -2,7 +2,7 @@
 //
 // Model for GlassNet events.
 //
-//   (C) Copyright 2017-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2017-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -23,7 +23,7 @@
 #include "eventtablemodel.h"
 
 EventTableModel::EventTableModel(QObject *parent)
-  : SqlTableModel(parent)
+  : SqlTableModel(false,parent)
 {
 }
 

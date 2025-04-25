@@ -39,7 +39,7 @@ ListChassis::ListChassis(QWidget *parent)
   //
   list_editchassis_dialog=new EditChassis(this);
 
-  list_model=new SqlTableModel(this);
+  list_model=new SqlTableModel(false,this);
   QString sql=QString("select ")+
     "`CHASSIS`.`ID`,"+             // 00
     "`SITES`.`NAME`,"+             // 01

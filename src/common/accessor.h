@@ -2,7 +2,7 @@
 //
 // Abstract base class for a DB object accessor.
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -42,6 +42,7 @@ class Accessor
   virtual void setRow(const QString &column,const QTime &time) const;
   virtual void setRow(const QString &column,const QDate &date) const;
   virtual void setRow(const QString &column,const QDateTime &dt) const;
+  virtual void setRowNull(const QString &column) const;
   QString dowFieldName(int dow) const;
 };
 

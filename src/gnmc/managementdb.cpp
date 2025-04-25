@@ -2,7 +2,7 @@
 //
 // MySQL Database routines for gnmc(1).
 //
-// (C) Copyright 2016-2022 Fred Gleason <fredg@paravelsystems.com>
+// (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //     All Rights Reserved.
 //
 //   This program is free software; you can redistribute it and/or modify
@@ -394,6 +394,15 @@ bool MainWidget::CheckSchema()
   if(schema<20) {
     sql=QString("alter table `FEEDS` ")+
       "add column `REMARKS` text after `URL`";
+    SqlQuery::run(sql,&ok);
+    if(!ok) {
+      return false;
+    }
+  }
+
+  if(schema<21) {
+    sql=QString("alter table `RECEIVERS` ")+
+      "add column `DEFAULT_FEED_ID` int after `UPDATE_FIRMWARE`";
     SqlQuery::run(sql,&ok);
     if(!ok) {
       return false;

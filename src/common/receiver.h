@@ -2,7 +2,7 @@
 //
 // Abstract a GlassNet receiver.
 //
-//   (C) Copyright 2016-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -51,6 +51,8 @@ class Receiver : public Accessor
   void setOnline(bool state) const;
   QString macAddress() const;
   void setMacAddress(const QString &mac) const;
+  int defaultFeedId() const;
+  void setDefaultFeedId(int id) const;
   int activeGuid() const;
   void setActiveGuid(int guid) const;
   bool updateFirmware() const;

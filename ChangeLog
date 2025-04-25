@@ -410,3 +410,11 @@
 	gnmc(1).
 	* Moved the 'Serial Number' column to the left in the 'List Chassis'
 	dialog in gnmc(1).
+2025-04-25 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'RECEIVERS.DEFAULT_FEED_ID' field to the management
+	database schema.
+	* Incremented the management database version to 21.
+	* Added a 'Default Feed' column to the 'List Receivers' dialog in
+	gnmc(1).
+	* Added a 'Default Feed ' control to the 'Edit Receiver' dialog in
+	gnmc(1).

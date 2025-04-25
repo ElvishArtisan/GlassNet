@@ -2,7 +2,7 @@
 //
 // Two dimensional, SQL-based data model for Rivendell.
 //
-//   (C) Copyright 2016-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -30,9 +30,10 @@
 #include "../../icons/redball.xpm"
 #include "../../icons/whiteball.xpm"
 
-SqlTableModel::SqlTableModel(QObject *parent)
+SqlTableModel::SqlTableModel(bool incl_none,QObject *parent)
   : QAbstractTableModel(parent)
 {
+  model_include_none=incl_none;
   model_columns=0;
   model_show_remarks=false;
 
@@ -137,7 +138,7 @@ QVariant SqlTableModel::data(const QModelIndex &index,int role) const
   case Qt::ForegroundRole:
     switch(fieldType(index.column())) {
     case SqlTableModel::ColorTextType:
-      return QVariant(model_display_datas[index.row()][model_field_key_columns.at(index.column())].value<QColor>());
+      return QVariant(model_display_datas[index.row()][model_field_key_columns.value(index.column())].value<QColor>());
 
     default:
       break;
@@ -230,8 +231,16 @@ void SqlTableModel::setQuery(const QString &sql,int remarks_col)
 
   SqlQuery *q=new SqlQuery(sql);
   model_columns=q->columns();
+  if(model_include_none) {
+    QList<QVariant> row;
+    for(int i=0;i<model_columns;i++) {
+      row.push_back(QVariant(tr("[none]")));
+    }
+    model_display_datas.push_back(row);
+    model_remarks.push_back(QVariant());
+  }
   while(q->next()) {
-    std::vector<QVariant> row;
+    QList<QVariant> row;
     for(int i=0;i<q->columns();i++) {
       row.push_back(q->value(i));
     }
@@ -257,7 +266,7 @@ QVariant SqlTableModel::headerData(int section,Qt::Orientation orient,
 {
   if((role==Qt::DisplayRole)&&(orient==Qt::Horizontal)) {
     if(GetHeader(section).isValid()) {
-      return model_headers.at(section);
+      return model_headers.value(section);
     }
     return QVariant(QString::asprintf("%d",section));
   }
@@ -283,7 +292,7 @@ bool SqlTableModel::setHeaderData(int section,Qt::Orientation orient,
 SqlTableModel::FieldType SqlTableModel::fieldType(int section) const
 {
   try {
-    return model_field_types.at(section);
+    return model_field_types.value(section);
   }
   catch (...) {
     return SqlTableModel::DefaultType;
@@ -299,49 +308,25 @@ void SqlTableModel::setFieldType(int section,SqlTableModel::FieldType type,
 }
 
 
-/*
-bool SqlTableModel::insertRows(int row,const QString &sql)
+QVariant SqlTableModel::id(int row) const
 {
-  if((row<0)||(row>(int)model_display_datas.size())) {
-    return false;
-  }
-  SqlQuery *q=new SqlQuery(sql);
-  if(q->size()>0) {
-    beginInsertRows(QModelIndex(),row,row+q->size()-1);
-    while(q->next()) {
-      std::vector<QVariant> row;
-      for(int i=0;i<model_columns;i++) {
-	row.push_back(q->value(i));
-      }
-      model_display_datas.push_back(row);
-      if(model_remarks_column<0) {
-	model_remarks.push_back(QVariant());
-      }
-      else {
-	model_remarks.push_back(q->value(model_remarks_column));
-      }
+  return model_display_datas.at(row).at(0);
+}
+
+
+int SqlTableModel::rowNumber(const QVariant &id)
+{
+  for(unsigned i=0;i<model_display_datas.size();i++) {
+    if(model_display_datas.at(i).at(0)==id) {
+      return i;
     }
-    endInsertRows();
   }
-  delete q;
-  return true;
+  if(model_include_none) {
+    return 0;
+  }
+  return -1;
 }
-*/
-/*
-bool SqlTableModel::removeRows(int row,int count,const QModelIndex &parent)
-{
-  if((row+count)>(int)model_display_datas.size()) {
-    return false;
-  }
-  beginRemoveRows(QModelIndex(),row,row+count-1);
-  for(int i=0;i<count;i++) {
-    model_display_datas.erase(model_display_datas.begin()+row);
-    model_remarks.erase(model_remarks.begin()+row);
-  }
-  endRemoveRows();
-  return true;
-}
-*/
+
 
 void SqlTableModel::update()
 {
@@ -360,7 +345,7 @@ void SqlTableModel::setShowRemarks(bool state)
 QVariant SqlTableModel::GetHeader(int section) const
 {
   try {
-    return model_headers.at(section);
+    return model_headers.value(section);
   }
   catch(...) {
     return QVariant();

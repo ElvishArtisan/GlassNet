@@ -2,7 +2,7 @@
 //
 // List GlassNet Sites
 //
-//   (C) Copyright 2016-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -38,7 +38,7 @@ ListSites::ListSites(QWidget *parent)
   //
   list_editsite_dialog=new EditSite(this);
 
-  list_model=new SqlTableModel(this);
+  list_model=new SqlTableModel(false,this);
   QString sql=QString("select ")+
     "`ID`,"+
     "`NAME` "+

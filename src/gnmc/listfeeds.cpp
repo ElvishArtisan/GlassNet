@@ -2,7 +2,7 @@
 //
 // List GlassNet Sites
 //
-//   (C) Copyright 2017-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2017-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -43,7 +43,7 @@ ListFeeds::ListFeeds(QWidget *parent)
   //
   list_remarks_check=new QCheckBox(this);
   list_remarks_label=new QLabel(tr("Show Note Bubbles"),this);
-  list_model=new SqlTableModel(this);
+  list_model=new SqlTableModel(false,this);
   connect(list_remarks_check,SIGNAL(toggled(bool)),
 	  list_model,SLOT(setShowRemarks(bool)));
   QString sql=QString("select ")+

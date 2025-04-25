@@ -2,7 +2,7 @@
 //
 // Abstract a GlassNet receiver.
 //
-//   (C) Copyright 2016-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -137,6 +137,23 @@ QString Receiver::macAddress() const
 void Receiver::setMacAddress(const QString &mac) const
 {
   setRow("MAC_ADDRESS",mac.toUpper());
+}
+
+
+int Receiver::defaultFeedId() const
+{
+  return getRow("DEFAULT_FEED_ID").toInt();
+}
+
+
+void Receiver::setDefaultFeedId(int id) const
+{
+  if(id>0) {
+    setRow("DEFAULT_FEED_ID",id);
+  }
+  else {
+    setRowNull("DEFAULT_FEED_ID");
+  }
 }
 
 

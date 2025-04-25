@@ -2,7 +2,7 @@
 //
 // List GlassNet Receivers
 //
-//   (C) Copyright 2016-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -45,14 +45,15 @@ ListReceivers::ListReceivers(QWidget *parent)
   //
   list_remarks_check=new QCheckBox(this);
   list_remarks_label=new QLabel(tr("Show Note Bubbles"),this);
-  list_model=new SqlTableModel(this);
+  list_model=new SqlTableModel(false,this);
   connect(list_remarks_check,SIGNAL(toggled(bool)),
 	  list_model,SLOT(setShowRemarks(bool)));
 
   QString sql=SqlFields()+
     "from `RECEIVERS` left join `CHASSIS` "+
     "on `RECEIVERS`.`CHASSIS_ID`=`CHASSIS`.`ID` left join `SITES` "+
-    "on `CHASSIS`.`SITE_ID`=`SITES`.`ID` "+
+    "on `CHASSIS`.`SITE_ID`=`SITES`.`ID` left join `FEEDS` "+
+    "on `RECEIVERS`.`DEFAULT_FEED_ID`=`FEEDS`.`ID` "+
     "order by `SITES`.`NAME`,`RECEIVERS`.`CHASSIS_ID`,`RECEIVERS`.`SLOT`,"+
     "`RECEIVERS`.`MAC_ADDRESS`";
   list_model->setQuery(sql,12);
@@ -65,23 +66,26 @@ ListReceivers::ListReceivers(QWidget *parent)
   list_model->setFieldType(3,SqlTableModel::NumericType);
   list_model->setHeaderData(4,Qt::Horizontal,tr("Slot"));
   list_model->setFieldType(4,SqlTableModel::NumericType);
-  list_model->setHeaderData(5,Qt::Horizontal,tr("Type"));
-  list_model->setFieldType(5,SqlTableModel::ReceiverType);
-  list_model->setHeaderData(6,Qt::Horizontal,tr("MAC Addr"));
-  list_model->setHeaderData(7,Qt::Horizontal,tr("Last Seen"));
-  list_model->setNullText(7,tr("[never]"));
-  list_model->setHeaderData(8,Qt::Horizontal,tr("Public Addr"));
-  list_model->setHeaderData(9,Qt::Horizontal,tr("Iface Addr"));
-  list_model->setHeaderData(10,Qt::Horizontal,tr("Firmware"));
-  list_model->setHeaderData(11,Qt::Horizontal,tr("Update Pending"));
-  list_model->setFieldType(11,SqlTableModel::BooleanType);
-  list_model->setHeaderData(12,Qt::Horizontal,tr("Remarks"));
-  //  list_model->setFieldType(12,SqlTableModel::BooleanType);
+
+  list_model->setHeaderData(5,Qt::Horizontal,tr("Default Feed"));
+  list_model->setFieldType(5,SqlTableModel::DefaultType);
+
+  list_model->setHeaderData(6,Qt::Horizontal,tr("Type"));
+  list_model->setFieldType(6,SqlTableModel::ReceiverType);
+  list_model->setHeaderData(7,Qt::Horizontal,tr("MAC Addr"));
+  list_model->setHeaderData(8,Qt::Horizontal,tr("Last Seen"));
+  list_model->setNullText(8,tr("[never]"));
+  list_model->setHeaderData(9,Qt::Horizontal,tr("Public Addr"));
+  list_model->setHeaderData(10,Qt::Horizontal,tr("Iface Addr"));
+  list_model->setHeaderData(11,Qt::Horizontal,tr("Firmware"));
+  list_model->setHeaderData(12,Qt::Horizontal,tr("Update Pending"));
+  list_model->setFieldType(12,SqlTableModel::BooleanType);
+  list_model->setHeaderData(13,Qt::Horizontal,tr("Remarks"));
   list_view=new TableView(this);
   list_view->setSelectionMode(QAbstractItemView::ExtendedSelection);
   list_view->setModel(list_model);
   list_view->hideColumn(0);
-  list_view->hideColumn(12);
+  list_view->hideColumn(13);
   list_view->resizeColumnsToContents();
   connect(list_view,SIGNAL(doubleClicked(const QModelIndex &)),
 	  this,SLOT(doubleClickedData(const QModelIndex &)));
@@ -136,7 +140,8 @@ int ListReceivers::exec()
   QString sql=SqlFields()+
     "from `RECEIVERS` left join `CHASSIS` "+
     "on `RECEIVERS`.`CHASSIS_ID`=`CHASSIS`.`ID` left join `SITES` "+
-    "on `CHASSIS`.`SITE_ID`=`SITES`.`ID` "+
+    "on `CHASSIS`.`SITE_ID`=`SITES`.`ID` left join `FEEDS` "+
+    "on `RECEIVERS`.`DEFAULT_FEED_ID`=`FEEDS`.`ID` "+
     "order by `SITES`.`NAME`,`RECEIVERS`.`CHASSIS_ID`,`RECEIVERS`.`SLOT`,"+
     "`RECEIVERS`.`MAC_ADDRESS`";
   list_model->setQuery(sql,12);
@@ -152,7 +157,8 @@ int ListReceivers::exec(int receiver_id)
   QString sql=SqlFields()+
     "from `RECEIVERS` left join `CHASSIS` "+
     "on `RECEIVERS`.`CHASSIS_ID`=`CHASSIS`.`ID` left join `SITES` "+
-    "on `CHASSIS`.`SITE_ID`=`SITES`.`ID` where "+
+    "on `CHASSIS`.`SITE_ID`=`SITES`.`ID` left join `FEEDS` "+
+    "on `RECEIVERS`.`DEFAULT_FEED_ID`=`FEEDS`.`ID` where "+
     QString::asprintf("`RECEIVERS`.`ID`=%d ",receiver_id)+
     "order by `SITES`.`NAME`,`RECEIVERS`.`CHASSIS_ID`,`RECEIVERS`.`SLOT`,"+
     "`RECEIVERS`.`MAC_ADDRESS`";
@@ -194,7 +200,6 @@ void ListReceivers::deleteData()
   if(s->hasSelection()) {
     int receiver_id=s->selectedRows()[0].data().toInt();
     Receiver *rcvr=new Receiver(receiver_id);
-
     QString sql=QString("select ")+
       "`CHASSIS`.`ID`,"+
       "`CHASSIS`.`SITE_ID` from "+
@@ -307,12 +312,13 @@ QString ListReceivers::SqlFields() const
     "`SITES`.`NAME`,"+                   // 02
     "`CHASSIS`.`SERIAL_NUMBER`,"+        // 03
     "`RECEIVERS`.`SLOT`,"+               // 04
-    "`RECEIVERS`.`TYPE`,"+               // 05
-    "`RECEIVERS`.`MAC_ADDRESS`,"+        // 06
-    "`RECEIVERS`.`LAST_SEEN`,"+          // 07
-    "`RECEIVERS`.`PUBLIC_ADDRESS`,"+     // 08
-    "`RECEIVERS`.`INTERFACE_ADDRESS`,"+  // 09
-    "`RECEIVERS`.`FIRMWARE_VERSION`,"+   // 10
-    "`RECEIVERS`.`UPDATE_FIRMWARE`,"+    // 11
-    "`RECEIVERS`.`REMARKS` ";            // 12
+    "`FEEDS`.`NAME`,"+                   // 05
+    "`RECEIVERS`.`TYPE`,"+               // 06
+    "`RECEIVERS`.`MAC_ADDRESS`,"+        // 07
+    "`RECEIVERS`.`LAST_SEEN`,"+          // 08
+    "`RECEIVERS`.`PUBLIC_ADDRESS`,"+     // 09
+    "`RECEIVERS`.`INTERFACE_ADDRESS`,"+  // 10
+    "`RECEIVERS`.`FIRMWARE_VERSION`,"+   // 11
+    "`RECEIVERS`.`UPDATE_FIRMWARE`,"+    // 12
+    "`RECEIVERS`.`REMARKS` ";            // 13
 }

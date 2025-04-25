@@ -2,7 +2,7 @@
 //
 // Two dimensional, SQL-based data model for GlassNet
 //
-//   (C) Copyright 2016 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -21,11 +21,10 @@
 #ifndef SQLTABLEMODEL_H
 #define SQLTABLEMODEL_H
 
-#include <map>
-#include <vector>
-
 #include <QAbstractTableModel>
 #include <QFont>
+#include <QList>
+#include <QMap>
 #include <QPixmap>
 #include <QSize>
 #include <QStringList>
@@ -40,7 +39,7 @@ class SqlTableModel : public QAbstractTableModel
 		  ReceiverType=6,NumericType=7,TriStateType=8,
 		  TimeType=9,BiStateType=10};
   enum TriState {Off=0,On=1,Disabled=2};
-  SqlTableModel(QObject *parent=0);
+  SqlTableModel(bool incl_none,QObject *parent);
   ~SqlTableModel();
   QFont font() const;
   void setFont(const QFont &font);
@@ -57,8 +56,8 @@ class SqlTableModel : public QAbstractTableModel
   		     int role=Qt::EditRole);
   FieldType fieldType(int section) const;
   void setFieldType(int section,FieldType type,int key_col=-1);
-  //  bool insertRows(int row,const QString &sql);
-  //  bool removeRows(int row,int count,const QModelIndex &parent=QModelIndex());
+  QVariant id(int row) const;
+  int rowNumber(const QVariant &id);
 
  public slots:
   void update();
@@ -68,14 +67,15 @@ class SqlTableModel : public QAbstractTableModel
   QVariant GetHeader(int section) const;
   QFont model_font;
   int model_columns;
+  bool model_include_none;
   QString model_sql;
   int model_remarks_column;
-  std::map<int,QVariant> model_headers;
-  std::map<int,FieldType> model_field_types;
-  std::map<int,int> model_field_key_columns;
-  std::vector<std::vector<QVariant> > model_display_datas;
-  std::vector<QString> model_null_texts;
-  std::vector<QVariant> model_remarks;
+  QMap<int,QVariant> model_headers;
+  QMap<int,FieldType> model_field_types;
+  QMap<int,int> model_field_key_columns;
+  QList<QList<QVariant> > model_display_datas;
+  QList<QString> model_null_texts;
+  QList<QVariant> model_remarks;
   bool model_show_remarks;
   QPixmap *model_greenball_map;
   QPixmap *model_redball_map;

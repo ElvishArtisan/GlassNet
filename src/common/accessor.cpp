@@ -2,7 +2,7 @@
 //
 // Abstract base class for a DB object accessor.
 //
-//   (C) Copyright 2016-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -116,6 +116,16 @@ void Accessor::setRow(const QString &column,const QDateTime &dt) const
   QString sql=QString("update ")+
     "`"+tableName()+"` set "+
     "`"+column+"`=\'"+dt.toString("yyyy-MM-dd hh:mm:ss")+"' where "+
+    whereClause();
+  SqlQuery::run(sql);
+}
+
+
+void Accessor::setRowNull(const QString &column) const
+{
+  QString sql=QString("update ")+
+    "`"+tableName()+"` set "+
+    "`"+column+"`=NULL where "+
     whereClause();
   SqlQuery::run(sql);
 }

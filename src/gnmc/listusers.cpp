@@ -2,7 +2,7 @@
 //
 // List GlassNet Users
 //
-//   (C) Copyright 2016-2022 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2016-2025 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -38,7 +38,7 @@ ListUsers::ListUsers(QWidget *parent)
   list_adduser_dialog=new AddUser(this);
   list_edituser_dialog=new EditUser(this);
 
-  list_model=new SqlTableModel(this);
+  list_model=new SqlTableModel(false,this);
   QString sql=QString("select ")+
     "`ID`,"+
     "`USERNAME`,"+
