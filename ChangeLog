@@ -405,3 +405,8 @@
 	* Changed the parameter of the 'Chassis' column in the 'List
 	Receivers' dialog' in gnmc(1) from the the chassis ID to the
 	chassis serial number.
+2025-04-25 Fred Gleason <fredg@paravelsystems.com>
+	* Removed the 'Slot' column from the 'List Chassis' dialog in
+	gnmc(1).
+	* Moved the 'Serial Number' column to the left in the 'List Chassis'
+	dialog in gnmc(1).
